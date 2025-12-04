@@ -1,4 +1,4 @@
-import { BaseService } from "./baseServer";
+import { BaseService } from "./baseService";
 
 export class WishlistService extends BaseService {
   async addToWishlist(data: { userId: number; bookId: number }) {

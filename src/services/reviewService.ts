@@ -1,4 +1,4 @@
-import { BaseService } from "./baseServer";
+import { BaseService } from "./baseService";
 
 export class ReviewService extends BaseService {
   async createReview(data: {

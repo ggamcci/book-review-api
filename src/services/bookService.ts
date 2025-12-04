@@ -63,11 +63,12 @@ export const bookService = {
 
     const where: any = {};
     if (query.keyword) {
-      where.OR = [
-        { title: { contains: query.keyword, mode: "insensitive" } },
-        { author: { contains: query.keyword, mode: "insensitive" } },
-      ];
+        where.OR = [
+            { title: { contains: query.keyword } },
+            { author: { contains: query.keyword } },
+        ];
     }
+
     if (query.category) {
       where.category = { equals: query.category };
     }

@@ -1,7 +1,11 @@
 import app from "./app";
+import http from "http";
 
-const PORT = process.env.PORT || 8080;
+const PORT = 19037;       // ★ 새 포트
+const HOST = "0.0.0.0";   // ★ 반드시 0.0.0.0 유지
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+const server = http.createServer(app);
+
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 Server running on http://${HOST}:${PORT}`);
 });

@@ -1,8 +1,8 @@
 import app from "./app";
 import http from "http";
 
-const PORT = 19037;       // ★ 새 포트
-const HOST = "0.0.0.0";   // ★ 반드시 0.0.0.0 유지
+const PORT = Number(process.env.PORT) || 8080;
+const HOST = "0.0.0.0" as string;
 
 const server = http.createServer(app);
 

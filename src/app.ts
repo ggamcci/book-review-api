@@ -7,6 +7,7 @@ import { swaggerSpec } from "./config/swagger";     // ✅ 추가
 
 import router from "./routes"; // ⭐ routes/index.ts 자동 연결
 import { errorHandler } from "./middlewares/errorHandler";
+import { requestLogger } from "./middlewares/logger";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ app.use(
 );
 
 app.use(express.json());
-
+app.use(requestLogger);
 // ✅ Swagger UI
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

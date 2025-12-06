@@ -1,0 +1,722 @@
+{
+  "info": {
+    "_postman_id": "b748b542-bca9-4768-a7fb-ce9b8d9e7d50",
+    "name": "book-review-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth(인증)",
+      "item": [
+        {
+          "name": "회원가입",
+          "id": "23a7ec73-1de3-42f7-85b3-e354bf6826b7",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"user1\",\r\n  \"email\": \"user56@example.com\",\r\n  \"password\": \"1234\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/signup",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ]
+            }
+          }
+        },
+        {
+          "name": "로그인",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "766ad108-b77f-4a8f-93ec-a7e3fa02e4ce",
+                "exec": [
+                  "const jsonData = pm.response.json();\r",
+                  "\r",
+                  "pm.globals.set(\"accessToken\", jsonData.data.accessToken);\r",
+                  "pm.globals.set(\"refreshToken\", jsonData.data.refreshToken);\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "id": "24566357-971d-4f94-8989-792959a4425a",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@example.com\",\r\n  \"password\": \"Admin123!\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "내 정보 조회",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "bb443cf5-3284-4b54-a597-397929fa8dd4",
+                "exec": [
+                  "pm.request.headers.add({\r",
+                  "  key: \"Authorization\",\r",
+                  "  value: \"Bearer \" + pm.globals.get(\"accessToken\")\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "id": "a56351fb-f1b2-45fa-a7d2-78b0067145c1",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "40b1fddc-b8e0-4edc-866b-2ee26142027c"
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "책 등록(Admin)",
+          "id": "507d53b7-36ac-4bca-b7f4-375e061badbb",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Postman Test Book\",\r\n  \"author\": \"Admin\",\r\n  \"price\": 20000,\r\n  \"stock\": 5,\r\n  \"category\": \"Programming\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ]
+            }
+          }
+        },
+        {
+          "name": "전체 목록",
+          "id": "a1dfd640-5833-488b-8b69-79c284716d75",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books?page=1&size=5&sort=price,DESC&keyword=Postman",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                },
+                {
+                  "key": "sort",
+                  "value": "price,DESC"
+                },
+                {
+                  "key": "keyword",
+                  "value": "Postman"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "단건 조회",
+          "id": "8b22f949-731a-4262-8d7a-379aa3657dd4",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/books/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "4"
+              ]
+            }
+          }
+        },
+        {
+          "name": "수정 (Admin)",
+          "id": "9e95bb5d-a3d2-4ef1-98a4-4b9725e47e65",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"price\": 18000,\r\n  \"stock\": 10\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/books/4",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "4"
+              ]
+            }
+          }
+        },
+        {
+          "name": "삭제",
+          "id": "5a25d007-bde1-4800-8ef2-8b611a300e50",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/books/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "books",
+                "3"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "27bda1bd-ee43-4a9d-87f8-b159e7db86d6"
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "리뷰 작성",
+          "id": "d118583d-7fb4-40dc-9d45-d14933c59407",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"bookId\": 2,\r\n  \"rating\": 5,\r\n  \"content\": \"정말 좋은 책입니다!\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews"
+              ]
+            }
+          }
+        },
+        {
+          "name": "리뷰 전체 조회",
+          "id": "aa9d21da-cd0c-436d-ad70-c5c5b67d2ea6",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews"
+              ]
+            }
+          }
+        },
+        {
+          "name": "리뷰 단건",
+          "id": "52bcda39-0a7a-4a4a-9346-6b2de602a1a4",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reviews/53",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "53"
+              ]
+            }
+          }
+        },
+        {
+          "name": "리뷰 수정",
+          "id": "a054bed0-6986-4806-88ba-eb03b353c023",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"rating\": 4,\r\n  \"content\": \"수정된 리뷰입니다.\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/reviews/14",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "14"
+              ]
+            }
+          }
+        },
+        {
+          "name": "리뷰 삭제",
+          "id": "e34c76e4-43ef-4014-8282-5069a6981519",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/reviews/53",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reviews",
+                "53"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "ce51d2f9-3d63-4b59-b6a9-bde1a9dae400"
+    },
+    {
+      "name": "Wishlist",
+      "item": [
+        {
+          "name": "찜 추가",
+          "id": "21071e29-1dd5-42cc-bb82-b6b883525bdb",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"bookId\": 2\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/wishlist",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist"
+              ]
+            }
+          }
+        },
+        {
+          "name": "찜조회",
+          "id": "4e277cb7-3d76-46c5-bcec-099c81037397",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/wishlist/user/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist",
+                "user",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "찜 삭제",
+          "id": "5ac22f1f-231e-4447-925f-d4073ad3160e",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/wishlist/3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "wishlist",
+                "3"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "dec100a7-d036-43e0-a505-d8c6a467674d"
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "장바구니 추가",
+          "id": "19790671-a2f6-4912-9fda-e59ef71684e2",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"bookId\": 4,\r\n  \"quantity\": 2\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cart"
+              ]
+            }
+          }
+        },
+        {
+          "name": "장바구니 조회",
+          "id": "d7977515-952f-44cb-ad3f-62dd6f954c10",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/cart/user/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cart",
+                "user",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "수량 변경",
+          "id": "53854d96-c645-4b9c-b780-918278b72d13",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"quantity\": 5\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cart",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "장바구니 삭제",
+          "id": "5f29eb90-a80b-4ffb-989e-4fe6db68ddb4",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/cart/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "cart",
+                "2"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "b297fb11-74ef-4c34-a524-0926f1c0a5a5"
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "주문 생성",
+          "id": "53083965-8c1e-4a89-a8ae-afa33d4a8c2b",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"bookId\": 2,\r\n  \"totalPrice\": 20000,\r\n  \"status\": \"ORDERED\",\r\n  \"paymentMethod\": \"CARD\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          }
+        },
+        {
+          "name": "전체 주문 (Admin)",
+          "id": "fc506f9d-3cd7-43ff-9761-4da41678e801",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 1,\r\n  \"bookId\": 2,\r\n  \"totalPrice\": 20000,\r\n  \"status\": \"ORDERED\",\r\n  \"paymentMethod\": \"CARD\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          }
+        },
+        {
+          "name": "유저 주문 조회",
+          "id": "03b23bad-bc38-4f73-b24b-3761426cd8d7",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders/user/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "user",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "주문 단건",
+          "id": "8734f06a-2813-48eb-84fb-326121915aca",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/orders/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "주문 상태 변경(Admin)",
+          "id": "d06b6af5-2dce-4423-8ef3-9cfb49deca4d",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"COMPLETED\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "2"
+              ]
+            }
+          }
+        },
+        {
+          "name": "주문 삭제(Admin)",
+          "id": "96bdc060-a37a-42a2-a904-eb143f0b642a",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/orders/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders",
+                "2"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "d9c88816-4c79-47bb-9c39-b79218b81191"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "권한 변경",
+          "id": "6e2c878f-6c90-48e7-b188-9a1c42dca4c0",
+          "request": {
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"role\": \"ADMIN\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/1/role",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                "role"
+              ]
+            }
+          }
+        }
+      ],
+      "id": "804ed93f-74f9-47f4-a865-1ee7542d79ac"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "43f8225c-a2a0-490c-b6d2-63ee9a73c7d7",
+        "type": "text/javascript",
+        "exec": [
+          "const token = pm.environment.get(\"accessToken\");\r",
+          "\r",
+          "if (token) {\r",
+          "  pm.request.headers.add({\r",
+          "    key: \"Authorization\",\r",
+          "    value: \"Bearer \" + token\r",
+          "  });\r",
+          "}\r",
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "f9b47534-2a07-4409-9c0b-86fc7b91bd1b",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

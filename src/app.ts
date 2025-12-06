@@ -12,8 +12,13 @@ dotenv.config();
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 // ✅ Swagger UI

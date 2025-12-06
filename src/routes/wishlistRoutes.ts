@@ -1,5 +1,10 @@
 import { Router } from "express";
 import { WishlistController } from "../controllers/wishlistController";
+import { requireAuth } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import {
+  addWishlistSchema,
+} from "../validators/wishlistValidator";
 
 const router = Router();
 const controller = new WishlistController();
@@ -31,11 +36,11 @@ const controller = new WishlistController();
  *             properties:
  *               userId:
  *                 type: integer
- *                 example: 사용자 ID
+ *                 example: 1
  *                 description: 사용자 ID
  *               bookId:
  *                 type: integer
- *                 example: 찜할 도서 ID
+ *                 example: 3
  *                 description: 찜할 도서 ID
  *     responses:
  *       201:
@@ -48,10 +53,17 @@ const controller = new WishlistController();
  *         description: 사용자 또는 도서가 존재하지 않음
  *       409:
  *         description: 이미 찜한 도서
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/", controller.add); // 찜 추가
+router.post(
+  "/",
+  requireAuth,
+  validate(addWishlistSchema),
+  controller.add
+);
 
 /**
  * @swagger
@@ -67,7 +79,7 @@ router.post("/", controller.add); // 찜 추가
  *         required: true
  *         schema:
  *           type: integer
- *           example: 사용자 ID
+ *           example: 1
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -79,7 +91,11 @@ router.post("/", controller.add); // 찜 추가
  *       500:
  *         description: 서버 오류
  */
-router.get("/user/:userId", controller.listByUser); // 유저 찜 조회
+router.get(
+  "/user/:userId",
+  requireAuth,
+  controller.listByUser
+);
 
 /**
  * @swagger
@@ -95,7 +111,7 @@ router.get("/user/:userId", controller.listByUser); // 유저 찜 조회
  *         required: true
  *         schema:
  *           type: integer
- *           example: Wishlist ID
+ *           example: 1
  *         description: Wishlist ID
  *     responses:
  *       204:
@@ -107,6 +123,10 @@ router.get("/user/:userId", controller.listByUser); // 유저 찜 조회
  *       500:
  *         description: 서버 오류
  */
-router.delete("/:id", controller.remove); // 찜 제거
+router.delete(
+  "/:id",
+  requireAuth,
+  controller.remove
+);
 
 export default router;

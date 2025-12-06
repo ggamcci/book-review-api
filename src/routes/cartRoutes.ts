@@ -1,5 +1,11 @@
 import { Router } from "express";
 import { CartController } from "../controllers/cartController";
+import { requireAuth } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import {
+  addCartSchema,
+  updateCartSchema,
+} from "../validators/cartValidator";
 
 const router = Router();
 const controller = new CartController();
@@ -48,10 +54,17 @@ const controller = new CartController();
  *         description: 인증 필요
  *       404:
  *         description: 사용자 또는 도서 없음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/", controller.add); // 장바구니 추가
+router.post(
+  "/",
+  requireAuth,
+  validate(addCartSchema),
+  controller.add
+);
 
 /**
  * @swagger
@@ -67,7 +80,7 @@ router.post("/", controller.add); // 장바구니 추가
  *         required: true
  *         schema:
  *           type: integer
- *           example: 사용자 ID
+ *           example: 1
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -79,7 +92,11 @@ router.post("/", controller.add); // 장바구니 추가
  *       500:
  *         description: 서버 오류
  */
-router.get("/user/:userId", controller.listByUser); // 유저 장바구니 조회
+router.get(
+  "/user/:userId",
+  requireAuth,
+  controller.listByUser
+);
 
 /**
  * @swagger
@@ -95,7 +112,7 @@ router.get("/user/:userId", controller.listByUser); // 유저 장바구니 조�
  *         required: true
  *         schema:
  *           type: integer
- *           example: CartItem ID
+ *           example: 1
  *         description: CartItem ID
  *     requestBody:
  *       required: true
@@ -118,10 +135,17 @@ router.get("/user/:userId", controller.listByUser); // 유저 장바구니 조�
  *         description: 인증 필요
  *       404:
  *         description: 장바구니 항목 없음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.patch("/:id", controller.updateQuantity); // 수량 변경
+router.patch(
+  "/:id",
+  requireAuth,
+  validate(updateCartSchema),
+  controller.updateQuantity
+);
 
 /**
  * @swagger
@@ -137,7 +161,7 @@ router.patch("/:id", controller.updateQuantity); // 수량 변경
  *         required: true
  *         schema:
  *           type: integer
- *           example: CartItem ID
+ *           example: 1
  *         description: CartItem ID
  *     responses:
  *       204:
@@ -149,6 +173,10 @@ router.patch("/:id", controller.updateQuantity); // 수량 변경
  *       500:
  *         description: 서버 오류
  */
-router.delete("/:id", controller.remove); // 삭제
+router.delete(
+  "/:id",
+  requireAuth,
+  controller.remove
+);
 
 export default router;

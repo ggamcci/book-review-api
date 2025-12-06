@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { bookController } from "../controllers/bookController";
 import { requireAuth, requireRole } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import {
+  createBookSchema,
+  updateBookSchema,
+} from "../validators/bookValidator";
 
 const router = Router();
 
@@ -22,31 +27,31 @@ const router = Router();
  *         name: page
  *         schema:
  *           type: integer
- *           example: 페이지 번호 
+ *           example: 0
  *         description: 페이지 번호
  *       - in: query
  *         name: size
  *         schema:
  *           type: integer
- *           example: 페이지당 데이터 개수
+ *           example: 10
  *         description: 페이지당 데이터 개수
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *           example: 정렬 조건
+ *           example: price,DESC
  *         description: 정렬 조건 (field,ASC|DESC)
  *       - in: query
  *         name: keyword
  *         schema:
  *           type: string
- *           example: 도서 제목 검색 키워드
+ *           example: node
  *         description: 도서 제목 검색 키워드
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
- *           example: 카테고리 필터
+ *           example: Programming
  *         description: 카테고리 필터
  *     responses:
  *       200:
@@ -70,7 +75,7 @@ router.get("/", bookController.list);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 도서 ID
+ *           example: 1
  *         description: 도서 ID
  *     responses:
  *       200:
@@ -120,12 +125,14 @@ router.get("/:id", bookController.getById);
  *     responses:
  *       201:
  *         description: 도서 등록 성공
+ *       400:
+ *         description: 잘못된 요청
  *       401:
  *         description: 인증 필요
  *       403:
  *         description: 관리자 권한 필요
- *       400:
- *         description: 잘못된 요청
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
@@ -133,6 +140,7 @@ router.post(
   "/",
   requireAuth,
   requireRole("ADMIN"),
+  validate(createBookSchema),
   bookController.create
 );
 
@@ -150,7 +158,7 @@ router.post(
  *         required: true
  *         schema:
  *           type: integer
- *           example: 도서 ID
+ *           example: 1
  *         description: 도서 ID
  *     requestBody:
  *       required: true
@@ -173,12 +181,16 @@ router.post(
  *     responses:
  *       200:
  *         description: 도서 수정 성공
+ *       400:
+ *         description: 잘못된 요청
  *       401:
  *         description: 인증 필요
  *       403:
  *         description: 관리자 권한 필요
  *       404:
  *         description: 도서가 존재하지 않음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
@@ -186,6 +198,7 @@ router.patch(
   "/:id",
   requireAuth,
   requireRole("ADMIN"),
+  validate(updateBookSchema),
   bookController.update
 );
 
@@ -203,7 +216,7 @@ router.patch(
  *         required: true
  *         schema:
  *           type: integer
- *           example: 도서 ID
+ *           example: 1
  *         description: 도서 ID
  *     responses:
  *       204:

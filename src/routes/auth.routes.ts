@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { authController } from "../controllers/authController";
 import { requireAuth } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import { signupSchema, loginSchema } from "../validators/authValidator";
 
 const router = Router();
 
@@ -44,10 +46,12 @@ const router = Router();
  *         description: 잘못된 요청
  *       409:
  *         description: 이메일 중복
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/signup", authController.signup);
+router.post("/signup", validate(signupSchema), authController.signup);
 
 /**
  * @swagger
@@ -78,10 +82,12 @@ router.post("/signup", authController.signup);
  *         description: 비밀번호 오류
  *       404:
  *         description: 사용자 없음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/login", authController.login);
+router.post("/login", validate(loginSchema), authController.login);
 
 /**
  * @swagger

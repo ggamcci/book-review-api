@@ -1,5 +1,11 @@
 import { Router } from "express";
 import { ReviewController } from "../controllers/reviewController";
+import { requireAuth } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import {
+  createReviewSchema,
+  updateReviewSchema,
+} from "../validators/reviewValidator";
 
 const router = Router();
 const controller = new ReviewController();
@@ -52,10 +58,17 @@ const controller = new ReviewController();
  *         description: 인증 필요
  *       404:
  *         description: 사용자 또는 도서가 존재하지 않음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/", controller.create);
+router.post(
+  "/",
+  requireAuth,
+  validate(createReviewSchema),
+  controller.create
+);
 
 /**
  * @swagger
@@ -83,7 +96,7 @@ router.get("/", controller.getList);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 리뷰 ID
+ *           example: 1
  *         description: 리뷰 ID
  *     responses:
  *       200:
@@ -109,7 +122,7 @@ router.get("/:id", controller.getOne);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 리뷰ID
+ *           example: 1
  *         description: 리뷰 ID
  *     requestBody:
  *       required: true
@@ -133,10 +146,17 @@ router.get("/:id", controller.getOne);
  *         description: 수정 권한 없음
  *       404:
  *         description: 리뷰가 존재하지 않음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.patch("/:id", controller.update);
+router.patch(
+  "/:id",
+  requireAuth,
+  validate(updateReviewSchema),
+  controller.update
+);
 
 /**
  * @swagger
@@ -152,7 +172,7 @@ router.patch("/:id", controller.update);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 리뷰 ID
+ *           example: 1
  *         description: 리뷰 ID
  *     responses:
  *       204:
@@ -166,6 +186,10 @@ router.patch("/:id", controller.update);
  *       500:
  *         description: 서버 오류
  */
-router.delete("/:id", controller.delete);
+router.delete(
+  "/:id",
+  requireAuth,
+  controller.delete
+);
 
 export default router;

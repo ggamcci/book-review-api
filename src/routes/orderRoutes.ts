@@ -1,5 +1,11 @@
 import { Router } from "express";
 import { OrderController } from "../controllers/orderController";
+import { requireAuth, requireRole } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import {
+  createOrderSchema,
+  updateOrderStatusSchema,
+} from "../validators/orderValidator";
 
 const router = Router();
 const controller = new OrderController();
@@ -55,10 +61,17 @@ const controller = new OrderController();
  *         description: 인증 필요
  *       404:
  *         description: 사용자 또는 도서 없음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.post("/", controller.create);
+router.post(
+  "/",
+  requireAuth,
+  validate(createOrderSchema),
+  controller.create
+);
 
 /**
  * @swagger
@@ -78,7 +91,12 @@ router.post("/", controller.create);
  *       500:
  *         description: 서버 오류
  */
-router.get("/", controller.getAll);
+router.get(
+  "/",
+  requireAuth,
+  requireRole("ADMIN"),
+  controller.getAll
+);
 
 /**
  * @swagger
@@ -94,7 +112,7 @@ router.get("/", controller.getAll);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 사용자 ID
+ *           example: 1
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -106,7 +124,11 @@ router.get("/", controller.getAll);
  *       500:
  *         description: 서버 오류
  */
-router.get("/user/:userId", controller.getByUser);
+router.get(
+  "/user/:userId",
+  requireAuth,
+  controller.getByUser
+);
 
 /**
  * @swagger
@@ -122,7 +144,7 @@ router.get("/user/:userId", controller.getByUser);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 주문 ID
+ *           example: 1
  *         description: 주문 ID
  *     responses:
  *       200:
@@ -134,7 +156,11 @@ router.get("/user/:userId", controller.getByUser);
  *       500:
  *         description: 서버 오류
  */
-router.get("/:id", controller.getOne);
+router.get(
+  "/:id",
+  requireAuth,
+  controller.getOne
+);
 
 /**
  * @swagger
@@ -150,7 +176,7 @@ router.get("/:id", controller.getOne);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 주문 ID
+ *           example: 1
  *         description: 주문 ID
  *     requestBody:
  *       required: true
@@ -173,10 +199,18 @@ router.get("/:id", controller.getOne);
  *         description: 관리자 권한 필요
  *       404:
  *         description: 주문이 존재하지 않음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
-router.patch("/:id", controller.updateStatus);
+router.patch(
+  "/:id",
+  requireAuth,
+  requireRole("ADMIN"),
+  validate(updateOrderStatusSchema),
+  controller.updateStatus
+);
 
 /**
  * @swagger
@@ -192,7 +226,7 @@ router.patch("/:id", controller.updateStatus);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 주문 ID
+ *           example: 1
  *         description: 주문 ID
  *     responses:
  *       204:
@@ -206,6 +240,11 @@ router.patch("/:id", controller.updateStatus);
  *       500:
  *         description: 서버 오류
  */
-router.delete("/:id", controller.delete);
+router.delete(
+  "/:id",
+  requireAuth,
+  requireRole("ADMIN"),
+  controller.delete
+);
 
 export default router;

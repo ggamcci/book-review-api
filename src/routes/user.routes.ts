@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { userController } from "../controllers/userController";
 import { requireAuth, requireRole } from "../middlewares/authMiddleware";
+import { validate } from "../middlewares/validate";
+import { updateUserRoleSchema } from "../validators/userValidator";
 
 const router = Router();
 
@@ -25,7 +27,7 @@ const router = Router();
  *         required: true
  *         schema:
  *           type: integer
- *           example: 권한을 변경할 사용자 ID
+ *           example: 3
  *         description: 권한을 변경할 사용자 ID
  *     requestBody:
  *       required: true
@@ -38,7 +40,7 @@ const router = Router();
  *             properties:
  *               role:
  *                 type: string
- *                 example: 변경할 권한
+ *                 example: ADMIN
  *                 description: 변경할 권한 (USER 또는 ADMIN)
  *     responses:
  *       200:
@@ -51,6 +53,8 @@ const router = Router();
  *         description: 관리자 권한 필요
  *       404:
  *         description: 사용자가 존재하지 않음
+ *       422:
+ *         description: 입력값 검증 실패 (VALIDATION_FAILED)
  *       500:
  *         description: 서버 오류
  */
@@ -58,6 +62,7 @@ router.patch(
   "/:id/role",
   requireAuth,
   requireRole("ADMIN"),
+  validate(updateUserRoleSchema),
   userController.changeRole
 );
 

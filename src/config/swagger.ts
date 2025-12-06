@@ -10,7 +10,7 @@ export const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        url: "http://113.198.66.68:10152/",
+        url: "http://113.198.66.68:10152",
         description: "Generated server url",
       },
     ],

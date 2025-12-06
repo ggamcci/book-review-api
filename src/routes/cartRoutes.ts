@@ -67,7 +67,7 @@ router.post("/", controller.add); // 장바구니 추가
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 사용자 ID
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -95,7 +95,7 @@ router.get("/user/:userId", controller.listByUser); // 유저 장바구니 조�
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: CartItem ID
  *         description: CartItem ID
  *     requestBody:
  *       required: true
@@ -137,7 +137,7 @@ router.patch("/:id", controller.updateQuantity); // 수량 변경
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: CartItem ID
  *         description: CartItem ID
  *     responses:
  *       204:

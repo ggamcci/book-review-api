@@ -22,31 +22,31 @@ const router = Router();
  *         name: page
  *         schema:
  *           type: integer
- *           example: 0
+ *           example: 페이지 번호 
  *         description: 페이지 번호
  *       - in: query
  *         name: size
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 페이지당 데이터 개수
  *         description: 페이지당 데이터 개수
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *           example: price,DESC
+ *           example: 정렬 조건
  *         description: 정렬 조건 (field,ASC|DESC)
  *       - in: query
  *         name: keyword
  *         schema:
  *           type: string
- *           example: node
+ *           example: 도서 제목 검색 키워드
  *         description: 도서 제목 검색 키워드
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
- *           example: Programming
+ *           example: 카테고리 필터
  *         description: 카테고리 필터
  *     responses:
  *       200:
@@ -70,7 +70,7 @@ router.get("/", bookController.list);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 도서 ID
  *         description: 도서 ID
  *     responses:
  *       200:
@@ -150,7 +150,7 @@ router.post(
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 도서 ID
  *         description: 도서 ID
  *     requestBody:
  *       required: true
@@ -203,7 +203,7 @@ router.patch(
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 도서 ID
  *         description: 도서 ID
  *     responses:
  *       204:

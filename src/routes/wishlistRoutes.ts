@@ -31,11 +31,11 @@ const controller = new WishlistController();
  *             properties:
  *               userId:
  *                 type: integer
- *                 example: 1
+ *                 example: 사용자 ID
  *                 description: 사용자 ID
  *               bookId:
  *                 type: integer
- *                 example: 5
+ *                 example: 찜할 도서 ID
  *                 description: 찜할 도서 ID
  *     responses:
  *       201:
@@ -67,7 +67,7 @@ router.post("/", controller.add); // 찜 추가
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 사용자 ID
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -95,7 +95,7 @@ router.get("/user/:userId", controller.listByUser); // 유저 찜 조회
  *         required: true
  *         schema:
  *           type: integer
- *           example: 15
+ *           example: Wishlist ID
  *         description: Wishlist ID
  *     responses:
  *       204:

@@ -94,7 +94,7 @@ router.get("/", controller.getAll);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 2
+ *           example: 사용자 ID
  *         description: 사용자 ID
  *     responses:
  *       200:
@@ -122,7 +122,7 @@ router.get("/user/:userId", controller.getByUser);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 주문 ID
  *         description: 주문 ID
  *     responses:
  *       200:
@@ -150,7 +150,7 @@ router.get("/:id", controller.getOne);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 주문 ID
  *         description: 주문 ID
  *     requestBody:
  *       required: true
@@ -192,7 +192,7 @@ router.patch("/:id", controller.updateStatus);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 주문 ID
  *         description: 주문 ID
  *     responses:
  *       204:

@@ -83,7 +83,7 @@ router.get("/", controller.getList);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 리뷰 ID
  *         description: 리뷰 ID
  *     responses:
  *       200:
@@ -109,7 +109,7 @@ router.get("/:id", controller.getOne);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 리뷰ID
  *         description: 리뷰 ID
  *     requestBody:
  *       required: true
@@ -152,7 +152,7 @@ router.patch("/:id", controller.update);
  *         required: true
  *         schema:
  *           type: integer
- *           example: 10
+ *           example: 리뷰 ID
  *         description: 리뷰 ID
  *     responses:
  *       204:

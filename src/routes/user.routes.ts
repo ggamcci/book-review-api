@@ -25,7 +25,7 @@ const router = Router();
  *         required: true
  *         schema:
  *           type: integer
- *           example: 3
+ *           example: 권한을 변경할 사용자 ID
  *         description: 권한을 변경할 사용자 ID
  *     requestBody:
  *       required: true
@@ -38,7 +38,7 @@ const router = Router();
  *             properties:
  *               role:
  *                 type: string
- *                 example: ADMIN
+ *                 example: 변경할 권한
  *                 description: 변경할 권한 (USER 또는 ADMIN)
  *     responses:
  *       200:

@@ -6,7 +6,7 @@ export async function getAdminToken() {
     .post("/api/auth/login")
     .send({
       email: "admin@example.com",
-      password: "1234",
+      password: "Admin123!",
     });
 
   return res.body.data.accessToken;

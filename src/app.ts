@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
+import swaggerUi from "swagger-ui-express";          // ✅ 추가
+import { swaggerSpec } from "./config/swagger";     // ✅ 추가
+
 import router from "./routes"; // ⭐ routes/index.ts 자동 연결
 import { errorHandler } from "./middlewares/errorHandler";
 
@@ -12,6 +15,9 @@ const app = express();
 // Middlewares
 app.use(cors());
 app.use(express.json());
+
+// ✅ Swagger UI
+app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Health Check
 app.get("/health", (req, res) => {

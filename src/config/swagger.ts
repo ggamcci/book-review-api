@@ -10,12 +10,8 @@ export const swaggerSpec = swaggerJSDoc({
     },
     servers: [
       {
-        url: "http://localhost:8080",
-        description: "Local Server",
-      },
-      {
-        url: "http://<JCloud-IP>:8080",
-        description: "JCloud Server",
+        url: "http://113.198.66.68:10152/",
+        description: "Generated server url",
       },
     ],
     components: {

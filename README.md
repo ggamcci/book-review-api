@@ -1,84 +1,88 @@
-# 📚 Book Review API
+1. 프로젝트 개요
 
-도서 관리, 리뷰, 장바구니, 주문, 찜 기능을 제공하는 **RESTful API 서버**입니다.  
-JWT 기반 인증/인가, 관리자 권한(RBAC), Prisma + MySQL을 사용한 백엔드 프로젝트입니다.
+본 프로젝트는 다음 기능을 제공합니다.
 
----
-
-## ✅ 1. 프로젝트 개요
-
-### 🔹 문제 정의
-- 사용자는 도서를 조회하고 리뷰를 작성할 수 있어야 한다.
-- 사용자는 장바구니, 찜, 주문 기능을 이용할 수 있어야 한다.
-- 관리자는 도서를 등록/수정/삭제할 수 있어야 한다.
-- JWT 인증 기반 보안이 적용되어야 한다.
-
-### 🔹 주요 기능
-- ✅ 회원가입 / 로그인 (JWT 인증)
-- ✅ 도서 CRUD (관리자 전용)
-- ✅ 리뷰 CRUD
-- ✅ 찜(Wishlist) 기능
-- ✅ 장바구니(Cart) 기능
-- ✅ 주문(Order) 기능
-- ✅ 페이지네이션 / 검색 / 정렬
-- ✅ Swagger 문서 자동화
-- ✅ Postman 테스트 자동화
+🔹 핵심 기능
+- 회원가입 / 로그인 / 토큰 재발급 (JWT)
+- 관리자 / 일반 사용자 권한 분리 (RBAC)
+- 도서(Book) 등록 / 수정 / 삭제 / 검색
+- 리뷰(Review) CRUD
+- 찜(Wishlist) CRUD
+- 장바구니(Cart) CRUD
+- 주문(Order) CRUD
+- 페이지네이션 / 검색 / 정렬
+- Prisma 기반 MySQL 연동
+- Swagger 자동 문서화
+- Postman 토큰 자동 저장 및 테스트
+- Seed 데이터 200건 이상 자동 삽입
+- JCloud 배포 완료
 
 ---
 
-2. 실행 방법
+2. 배포 주소 (JCloud)
 
-- 1) GitHub 저장소 클론
+- **Base API URL**
+http://113.198.66.68:10152/api
 
+- **Swagger UI**
+http://113.198.66.68:10152/swagger-ui
+
+- **Health Check**
+http://113.198.66.68:10152/health
+
+
+3. 실행 방법 (로컬 실행)
+
+3-1) 저장소 클론
 ```bash
 git clone https://github.com/ggamcci/book-review-api.git
 cd book-review-api
 
-- 로컬 실행
-
-```bash
-# 1. 의존성 설치
+3-2) 패키지 설치
 npm install
 
-# 2. 환경 변수 파일 설정
-cp .env.example .env
+3-3) 환경 변수 설정(.env.example)
 
-# 3. Prisma 마이그레이션
+# ✅ Database Connection (Example)
+DATABASE_URL="mysql://book_user:your_password@localhost:3306/book_service"
+
+# ✅ JWT Secrets (Example)
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+
+# ✅ JWT Expiration
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+
+3-4) Prisma 마이그레이션
 npx prisma migrate dev
 
-# 4. 시드 데이터 삽입
+3-5) Seed 데이터 삽입 (200건 이상)
 npx prisma db seed
 
-# 5. 서버 실행
+3-6) 서버 실행
 npm run dev
 
--xshell 실행
+4. JCloud(XShell) 실행 방법
 
-호스트 113.198.66.68, 포트번호 10152, 키 파일 lcw1 선택
+호스트: 13.198.66.68, 포트: 19152, pem: pem 파일
 
-2) 프로젝트 폴더 이동
-cd ~/book-review-api
-
-🔹 3) 의존성 설치
+cd book-review-api
+git pull
 npm install
-
-🔹 4) 환경 변수 설정
-cp .env.example .env
-nano .env
-
-
-→ .env 내부에서 DB, JWT, PORT 값 수정
-
-🔹 5) Prisma 마이그레이션 & 시드 데이터 삽입
-npx prisma migrate deploy
-npx prisma db seed
-
-🔹 6) 서버 실행
 npm run dev
 
+5. 예제 계정
+구분	이메일	비밀번호
+관리자/admin@example.com/Admin123
+사용자/user56@example.com/1234
 
+6. 한계 및 개선 계획
+결제 API 외부 연동 예정
 
+주문 다중 상품 구조 개선 필요
 
+관리자 통계 API 추가 예정
 
-# 5. 서버 실행
-npm run dev
+Docker 기반 배포 자동화 예정
